@@ -1,23 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
+import LoginPage from './components/LoginPage';
+import { useEffect, useState } from 'react';
+import { dounloadLocalStorage } from './utils/localStorageDB';
 
 function App() {
+  // here should be token
+  // let [token, setToken] = useState()
+  let [userId, setUserId] = useState()
+
+  useEffect(() => {
+    dounloadLocalStorage();
+  }, [])
+
+  const exitEvent = () => {
+    setUserId(undefined)
+  }
+
+  if (!userId) {
+    return (
+      <LoginPage setUserId={setUserId} />
+    )
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>some</div>
+      <button onClick={exitEvent}>Exit</button>
     </div>
   );
 }
