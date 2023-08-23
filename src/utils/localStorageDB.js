@@ -1,4 +1,7 @@
 export function dounloadLocalStorage() {
+    if (localStorage.typeOfExercises && localStorage.users) {
+        return
+    }
     const users = {}
     users["1"] = {
         login: "dmitry",
