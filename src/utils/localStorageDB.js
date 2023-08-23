@@ -1,62 +1,90 @@
-export function dounloadLocalStorage() {
-    if (localStorage.typeOfExercises && localStorage.users) {
-        return
+class UserManager {
+    constructor() {
+        if (UserManager.instance) {
+            return UserManager.instance;
+        }
+        UserManager.instance = this;
+
+        if (!this.loadDataFromLocalStorage()) {
+            this.loadTestData();
+        }
     }
-    const users = {}
-    users["1"] = {
-        login: "dmitry",
-        password: "123",
-        daysArray: [
-            {
-                date: "22.08.2023",
-                exercises: [
+
+    loadDataFromLocalStorage() {
+        const users = localStorage.getItem('users');
+        const typeOfExercises = localStorage.getItem('typeOfExercises');
+
+        if (users && typeOfExercises) {
+            this.users = JSON.parse(users);
+            this.typeOfExercises = JSON.parse(typeOfExercises);
+            return true;
+        }
+        return false;
+    }
+
+    saveDataToLocalStorage() {
+        localStorage.setItem('users', JSON.stringify(this.users));
+        localStorage.setItem('typeOfExercises', JSON.stringify(this.typeOfExercises));
+    }
+
+    loadTestData() {
+        this.users = {
+            "1": {
+                login: "dmitry",
+                password: "123",
+                daysArray: [
                     {
-                        type: "abs",
-                        time: 30,
-                    },
-                    {
-                        type: "push",
-                        time: 20
-                    }
-                ],
-                meals: [
-                    {
-                        type: "fried chicken",
-                        amount: 0.3,
-                        calories: 300
+                        date: "22.08.2023",
+                        exercises: [
+                            {
+                                type: "abs",
+                                time: 30,
+                            },
+                            {
+                                type: "push",
+                                time: 20
+                            }
+                        ],
+                        meals: [
+                            {
+                                type: "fried chicken",
+                                amount: 0.3,
+                                calories: 300
+                            }
+                        ]
                     }
                 ]
             }
-        ]
+        };
+
+        this.typeOfExercises = [
+            {
+                type: "abs",
+                caloriesPerHour: 300
+            },
+            {
+                type: "push",
+                caloriesPerHour: 500
+            }
+        ];
+
+        this.saveDataToLocalStorage();
     }
-    const typeOfExercises = [
-        {
-            type: "abs",
-            caloriesPerHour: 300
-        },
-        {
-            type: "push",
-            caloriesPerHour: 500
-        }
-    ]
 
-    localStorage.typeOfExercises = JSON.stringify(typeOfExercises)
-    localStorage.users = JSON.stringify(users)
-}
+    getUsers() {
+        return this.users;
+    }
 
-function getUsers() {
-    const users = JSON.parse(localStorage.users)
-    return users
-}
-
-export function authentication (login, password) {
-    const users = getUsers()
-    for (let id of Object.keys(users)){
-        if (users[id].login === login) {
-            if (users[id].password == password) {
-                return id
+    authentication(login, password) {
+        for (let id of Object.keys(this.users)) {
+            if (this.users[id].login === login) {
+                if (this.users[id].password === password) {
+                    return id;
+                }
             }
         }
+        return undefined;
     }
-    return undefined
 }
+
+export const userManager = new UserManager();
