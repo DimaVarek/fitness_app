@@ -6,7 +6,6 @@ function HomePage({ exitEvent }) {
             <button onClick={exitEvent}>Exit</button>
             <Link to="/home/day/today"><button>Home</button></Link>
             <Link to="/home/stats"><button>Stats</button></Link>
-            <div>Home</div>
             <Outlet />
         </div>
     );

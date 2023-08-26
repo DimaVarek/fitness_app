@@ -69,7 +69,9 @@ function DayPage({userID }) {
             />
 
             {dayInfo && <div>Date - {dayInfo.date}</div>}
+            <h2>Meals</h2>
             <MealsList meals={dayInfo?.meals} add={openMealModal} changeable={changeable} />
+            <h2>Exercises</h2>
             <ExercisesList exercises={dayInfo?.exercises} add={openExerciseModal} changeable={changeable} />
         </div>
     );

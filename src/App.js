@@ -5,6 +5,7 @@ import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
 import DayPage from './components/DayPage';
 import { userManager } from './utils/localStorageDB';
+import Stats from "./components/Stats";
 
 function App() {
   const [userId, setUserId] = useState(userManager.getCurrentUser());
@@ -36,7 +37,7 @@ function App() {
                 <Route path="/home/*" element={<HomePage exitEvent={exitEvent} />}>
                   <Route index element={<Navigate to="/day/today" />} />
                   <Route path="day/:date" element={<DayPage userID={userId} />} />
-                  <Route path="stats" element={<div>Stats</div>} />
+                  <Route path="stats" element={<Stats />} />
                 </Route>
               </>
           ) : (
