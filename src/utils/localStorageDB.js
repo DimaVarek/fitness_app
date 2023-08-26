@@ -34,7 +34,27 @@ class UserManager {
                 password: "123",
                 daysArray: [
                     {
-                        date: "22.08.2023",
+                        date: "22-08-2023",
+                        exercises: [
+                            {
+                                type: "abs",
+                                time: 30,
+                            },
+                            {
+                                type: "push",
+                                time: 20
+                            }
+                        ],
+                        meals: [
+                            {
+                                type: "fried chicken",
+                                amount: 0.3,
+                                calories: 300
+                            }
+                        ]
+                    },
+                    {
+                        date: "26-08-2023",
                         exercises: [
                             {
                                 type: "abs",
@@ -67,12 +87,23 @@ class UserManager {
                 caloriesPerHour: 500
             }
         ];
-
+        
         this.saveDataToLocalStorage();
     }
 
     getUsers() {
         return this.users;
+    }
+
+    getCurrentUser() {
+        const currentUser = localStorage.getItem('currentuser');
+        return currentUser
+    }
+    setCurrentUser(currentUser) {
+        localStorage.setItem('currentuser', currentUser)
+    }
+    removeCurrentUser() {
+        localStorage.removeItem('currentuser')
     }
 
     authentication(login, password) {
@@ -85,6 +116,78 @@ class UserManager {
         }
         return undefined;
     }
+
+    getDayInfoForUser(userID, date) {
+        return this.users[userID].daysArray.find(day => {
+            return _isSameDates(date, day.date)
+        })
+    }
+
+    addMeal(userID, date, name, amount, calories) {
+        let index = this.users[userID].daysArray.findIndex(day => _isSameDates(day.date, date))
+        if (index == -1){
+            this.users[userID].daysArray.push(
+                {
+                    date: date,
+                    exercises: [],
+                    meals: [
+                        {
+                            type: name,
+                            amount: amount,
+                            calories: calories
+                        }
+                    ]
+                }
+            )
+        }
+        else {
+            this.users[userID].daysArray[index].meals.push(
+                {
+                    type: name,
+                    amount: amount,
+                    calories: calories
+                }
+            ) 
+        }
+        this.saveDataToLocalStorage() 
+    }
+    addEx(userID, date, name, time) {
+        let index = this.users[userID].daysArray.findIndex(day => _isSameDates(day.date, date))
+        if (index == -1){
+            this.users[userID].daysArray.push(
+                {
+                    date: date,
+                    exercises: [
+                        {
+                            type: name,
+                            time: time
+                        }
+                    ],
+                    meals: []
+                }
+            )
+        }
+        else {
+            this.users[userID].daysArray[index].exercises.push(
+                {
+                    type: name,
+                    time: time
+                }
+            ) 
+        }
+        this.saveDataToLocalStorage()
+    }
+    
 }
+
+function _isSameDates(date1, date2) {
+    date1 = date1.split("-").map(num => parseInt(num))
+    date2 = date2.split("-").map(num => parseInt(num))
+    
+    return date1[0] === date2[0] && date1[1] === date2[1] && date1[2] === date2[2]
+    
+}
+
+
 
 export const userManager = new UserManager();

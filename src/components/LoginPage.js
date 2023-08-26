@@ -1,14 +1,20 @@
 import { useState } from "react"
-import { authentication } from "../utils/localStorageDB"
+import { userManager as db } from "../utils/localStorageDB"
+import { useNavigate } from "react-router-dom"
 
-export default function ({setUserId}) {
+export default function ({loginEvent}) {
     let [userName, setUserName] = useState()
     let [password, setPassword] = useState()
 
-    const submit = () => {
-        let userId = authentication(userName, password)
+    const navigate = useNavigate()
+
+    const submit = (event) => {
+        console.log('submit')
+        event.preventDefault()
+        let userId = db.authentication(userName, password)
         if (userId) {
-            setUserId(userId)
+            loginEvent(userId)
+            navigate('/')
         }
     }
 
@@ -26,7 +32,7 @@ export default function ({setUserId}) {
                         <input type="password" onChange={e => setPassword(e.target.value)}/>
                     </label>
                     <div>
-                        <button type="submit" onClick={submit}>Submit</button>
+                        <button type="submit" onClick={(event) => submit(event)}>Submit</button>
                     </div>
                 </form>
             </div>
