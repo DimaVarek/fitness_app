@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import './App.css';
 import HomePage from './components/HomePage';
 import LoginPage from './components/LoginPage';
@@ -8,12 +8,15 @@ import { userManager } from './utils/localStorageDB';
 
 function App() {
   const [userId, setUserId] = useState(userManager.getCurrentUser());
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userId) {
       userManager.setCurrentUser(userId);
+    } else {
+      navigate('/login');
     }
-  }, [userId]);
+  }, [userId, navigate]);
 
   const exitEvent = () => {
     userManager.removeCurrentUser();
