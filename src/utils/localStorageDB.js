@@ -38,18 +38,20 @@ class UserManager {
                         exercises: [
                             {
                                 type: "abs",
-                                time: 30,
+                                time: 5,
+                                calories: 120
                             },
                             {
                                 type: "push",
-                                time: 20
+                                time: 0.5,
+                                calories: 100
                             }
                         ],
                         meals: [
                             {
                                 type: "fried chicken",
                                 amount: 0.3,
-                                calories: 300
+                                calories: 1000
                             }
                         ]
                     },
@@ -98,6 +100,10 @@ class UserManager {
     getCurrentUser() {
         const currentUser = localStorage.getItem('currentuser');
         return currentUser
+    }
+
+    getUserById(userId) {
+        return this.users[userId];
     }
     setCurrentUser(currentUser) {
         localStorage.setItem('currentuser', currentUser)
@@ -151,29 +157,25 @@ class UserManager {
         }
         this.saveDataToLocalStorage() 
     }
-    addEx(userID, date, name, time) {
+    addEx(userID, date, name, time, calories) {  // Added calories
         let index = this.users[userID].daysArray.findIndex(day => _isSameDates(day.date, date))
         if (index == -1){
-            this.users[userID].daysArray.push(
-                {
-                    date: date,
-                    exercises: [
-                        {
-                            type: name,
-                            time: time
-                        }
-                    ],
-                    meals: []
-                }
-            )
+            this.users[userID].daysArray.push({
+                date: date,
+                exercises: [{
+                    type: name,
+                    time: time,
+                    calories: calories  // Added calories
+                }],
+                meals: []
+            })
         }
         else {
-            this.users[userID].daysArray[index].exercises.push(
-                {
-                    type: name,
-                    time: time
-                }
-            ) 
+            this.users[userID].daysArray[index].exercises.push({
+                type: name,
+                time: time,
+                calories: calories  // Added calories
+            })
         }
         this.saveDataToLocalStorage()
     }

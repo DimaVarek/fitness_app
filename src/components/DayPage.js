@@ -33,8 +33,8 @@ function DayPage({userID }) {
     const closeExerciseModal = () => {
         setExerciseModalIsOpen(false);
     };
-    const addEx = (name, time) => {
-        userManager.addEx(userID, date, name, time);
+    const addEx = (name, time, calories) => {
+        userManager.addEx(userID, date, name, time, calories);  // Added calories
         getDateInfo();
     };
 
@@ -47,9 +47,20 @@ function DayPage({userID }) {
 
     if (date === "today") {
         changeable = true;
-        date = new Date(Date.now());
-        date = [date.getDate(), date.getMonth() + 1, date.getFullYear()].join('-');
+        const currentDate = new Date(Date.now());
+        date = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+    } else {
+        const [day, month, year] = date.split('-').map(Number);
+        const inputDate = new Date(year, month - 1, day);
+
+        const todayDate = new Date();
+        todayDate.setHours(0, 0, 0, 0);
+
+        if (inputDate.getTime() === todayDate.getTime()) {
+            changeable = true;
+        }
     }
+
 
     useEffect(() => {
         getDateInfo();

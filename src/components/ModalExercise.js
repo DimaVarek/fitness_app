@@ -3,7 +3,8 @@ import Modal from 'react-modal';
 function ModalExercise({exerciseModalIsOpen, closeExerciseModal, addExerciseToDB}) {
     let [name, setName] = useState("")
     let [time, setTime] = useState(0)
-    
+    let [calories, setCalories] = useState(0)  // state for calories
+
     const customStyles = {
         content: {
           top: '50%',
@@ -15,9 +16,10 @@ function ModalExercise({exerciseModalIsOpen, closeExerciseModal, addExerciseToDB
         },
     };
     const addEx = () => {
-        addExerciseToDB(name, time)
+        addExerciseToDB(name, time, calories)  // Added calories
         closeExerciseModal()
     }
+
     return ( 
         <Modal
         isOpen={exerciseModalIsOpen}
@@ -30,6 +32,10 @@ function ModalExercise({exerciseModalIsOpen, closeExerciseModal, addExerciseToDB
                     <label>
                         <p>Name: </p>
                         <input type="text" onChange={e => setName(e.target.value)}/>
+                    </label>
+                    <label>
+                        <p>Calories per minute: </p>
+                        <input type="number" onChange={e => setCalories(e.target.value)}/>
                     </label>
                     <label>
                         <p>Time: </p>
