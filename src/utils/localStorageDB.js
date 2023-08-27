@@ -34,7 +34,7 @@ class UserManager {
                 password: "123",
                 daysArray: [
                     {
-                        date: "27-08-2023",
+                        date: "26-08-2023",
                         exercises: [
                             {
                                 type: "abs",
@@ -56,15 +56,17 @@ class UserManager {
                         ]
                     },
                     {
-                        date: "26-08-2023",
+                        date: "27-08-2023",
                         exercises: [
                             {
                                 type: "abs",
                                 time: 30,
+                                calories: 100
                             },
                             {
                                 type: "push",
-                                time: 20
+                                time: 20,
+                                calories: 100
                             }
                         ],
                         meals: [

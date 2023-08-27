@@ -10,6 +10,8 @@ const Stats = () => {
     const [currentYear, setCurrentYear] = useState(today.getFullYear());
     const [daysInMonth, setDaysInMonth] = useState(0);
     const [selectedDay, setSelectedDay] = useState(today.getDate());
+    const [monthlyCaloriesStats, setMonthlyCaloriesStats] = useState({ received: 0, burned: 0 });
+
 
     const [caloriesStats, setCaloriesStats] = useState({ received: 0, burned: 0 });  // New state variable
 
@@ -96,6 +98,37 @@ const Stats = () => {
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+    // UseEffect to calculate monthly totals
+    useEffect(() => {
+        let monthlyBurned = 0, monthlyReceived = 0;
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${day}-${currentMonth + 1}-${currentYear}`;
+            const userDayData = getUserDayData(dateStr);
+
+            //console.log(`Data for ${dateStr}:`, userDayData);  // Debug log
+
+            if (userDayData && userDayData.exercises) {
+                userDayData.exercises.forEach(ex => {
+                    console.log(`Time: ${ex.time}, Calories: ${ex.calories}`);  // Debug log
+                    monthlyBurned += ex.time * ex.calories;
+                });
+            }
+
+            if (userDayData && userDayData.meals) {
+                userDayData.meals.forEach(meal => {
+                    console.log(`Amount: ${meal.amount}, Calories: ${meal.calories}`);  // Debug log
+                    monthlyReceived += (meal.amount * 10) * meal.calories;
+                });
+            }
+        }
+
+        console.log(`Monthly burned: ${monthlyBurned}, Monthly received: ${monthlyReceived}`);  // Debug log
+
+        setMonthlyCaloriesStats({ received: monthlyReceived, burned: monthlyBurned });
+    }, [daysInMonth, currentMonth, currentYear]);
+
+
     return (
         <div className="stats">
             <button onClick={() => moveMonth('prev')}>Previous Month</button>
@@ -113,6 +146,10 @@ const Stats = () => {
                 ))}
             </div>
             <button onClick={goToDetails}>Details</button>
+            <div className="monthly-stats">  {/* New div for monthly stats */}
+                <p>Monthly Calories Burned: {monthlyCaloriesStats.burned.toFixed(2)}</p>
+                <p>Monthly Calories Received: {monthlyCaloriesStats.received.toFixed(2)}</p>
+            </div>
 
             {selectedDay && (
                 <div className="calories-info">
